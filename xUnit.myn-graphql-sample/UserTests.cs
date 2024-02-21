@@ -25,11 +25,9 @@ namespace xUnit.myn_graphql_sample
             var services = new ServiceCollection();
             services
                  .AddDbContext<AppDbContext>(options => options.UseNpgsql(sqlConnectionString), ServiceLifetime.Scoped)
-                .AddGraphQL()
-                  .AddQueryType()
-                .AddMutationType()
-                .AddTypeExtension<UserQueries>()
-                .AddTypeExtension<UserMutations>();
+                .AddGraphQLServer()
+    .AddQueryType<UserQueries>()
+    .AddMutationType<UserMutations>();
 
             // Build the service provider and resolve the IRequestExecutorResolver
             var serviceProvider = services.BuildServiceProvider();
@@ -149,7 +147,7 @@ namespace xUnit.myn_graphql_sample
             // Create and execute the query
             var request = QueryRequestBuilder.New()
                 .SetQuery(@"mutation {
-                      deleteUser(id: 1)
+                      deleteUser(id: 2)
                     }")
                 .Create();
 

@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using myn_graphql_sample.Data;
+using myn.Data.Data;
 using myn_graphql_sample.GraphQL.MutationTypes;
 using myn_graphql_sample.GraphQL.QueryTypes;
-using myn_graphql_sample.Repositories;
+using myn.Data.Repositories;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,24 +20,22 @@ builder.Services.AddGraphQLServer()
     .AddQueryType<UserQueries>()
     .AddMutationType<UserMutations>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+//builder.Services.AddEndpointsApiExplorer();
+//builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//}
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapGraphQL();
-
 app.MapControllers();
 
 app.Run();

@@ -1,5 +1,5 @@
-﻿using myn_graphql_sample.Entities;
-using myn_graphql_sample.Repositories;
+﻿using myn.Data.Entities;
+using myn.Data.Repositories;
 
 namespace myn_graphql_sample.GraphQL.QueryTypes
 {
