@@ -37,6 +37,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapGraphQL();
+app.MapGet("/", () => "GraphQL");
 
 app.MapControllers();
 
