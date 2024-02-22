@@ -9,18 +9,17 @@ namespace myn_graphql_sample.GraphQL.QueryTypes
     {
         private readonly IUserService _userService;
         private readonly IMediator _mediator;
-        public UserQueries(IUserService IUserService, IMediator mediator)
+        public UserQueries(IMediator mediator)
         {
-            _userService = IUserService;
             _mediator = mediator;
         }
         public async Task<IEnumerable<User>>  GetUserList()
         {
             return await _mediator.Send(new GetUsersQuery());
         }
-        public User GetUserById([ID] int id)
+        public Task<User> GetUserById([ID] int id)
         {
-            return _userService.GetUserById(id);
+            return await _mediator.Send(new GetUserById(id));
         }
 
     }
