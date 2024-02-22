@@ -19,11 +19,10 @@ namespace xUnit.myn_graphql_sample
           .WithImage("postgres:15-alpine")
           .Build();
         private readonly IRequestExecutorResolver _resolver;
-        private readonly IServiceScopeFactory _scopeFactory;
         private readonly AppDbContext _context;
         public UserTests()
         {
-            var sqlConnectionString = "Host=localhost;Database=postgres;Username=postgres;Password=start;Port=5432";
+            var sqlConnectionString = "Host=localhost;Database=MYN_Test_DB;Username=postgres;Password=start;Port=5432";
             // Initialize the service collection and configure HotChocolate
             var services = new ServiceCollection();
             services
@@ -36,15 +35,8 @@ namespace xUnit.myn_graphql_sample
             // Build the service provider and resolve the IRequestExecutorResolver
             var serviceProvider = services.BuildServiceProvider();
             _resolver = serviceProvider.GetRequiredService<IRequestExecutorResolver>();
-            // Get IServiceScopeFactory
-            _scopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
-
-            // Create scope and resolve DbContext
-            using (var scope = _scopeFactory.CreateScope())
-            {
-                var service = scope.ServiceProvider;
-                _context = service.GetRequiredService<AppDbContext>();
-            }
+            // Resolve DbContext
+            _context = serviceProvider.GetRequiredService<AppDbContext>();
         }
         public Task InitializeAsync()
         {
