@@ -1,6 +1,7 @@
-﻿namespace myn_graphql_sample.Data.Handlers.Commands
+﻿using MediatR;
+using myn_graphql_sample.Entities;
+
+namespace myn_graphql_sample.Data.Handlers.Commands
 {
-    public class AddUserCommandHandler
-    {
-    }
+    public record AddUserCommandHandler(User user) : IRequest<User>;
 }
