@@ -17,9 +17,9 @@ namespace myn_graphql_sample.GraphQL.QueryTypes
         {
             return await _mediator.Send(new GetUsersQuery());
         }
-        public Task<User> GetUserById([ID] int id)
+        public async Task<User> GetUserById([ID] int id)
         {
-            return await _mediator.Send(new GetUserById(id));
+            return (User)await _mediator.Send(new GetUserById(id));
         }
 
     }
