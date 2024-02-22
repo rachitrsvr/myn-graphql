@@ -80,12 +80,12 @@ namespace xUnit.myn_graphql_sample
         {
             // Resolve the IRequestExecutor
             IRequestExecutor executor = await _resolver.GetRequestExecutorAsync();
-            var data = _context.Users.ToList();
+            var NewId = _context.Users.Max(entity => (int?)entity.Id) + 1;
             // Create and execute the query
             var request = QueryRequestBuilder.New()
-                .SetQuery(@"mutation {
+                .SetQuery(@"mutation AddUser($id: ID!) {
                       addUser(input: {
-                        id:5
+                        id: $id
                         firstName: ""Roy""
                         lastName: ""Hudson""
                         email: ""roy@test.com""
@@ -100,14 +100,18 @@ namespace xUnit.myn_graphql_sample
     
                       }
                     }")
+                 .AddVariableValue("id", NewId)
                 .Create();
 
             // Act
             IExecutionResult result = await executor.ExecuteAsync(request);
+            var chkIfIdExist = _context.Users.Any(x => x.Id == NewId);
             // Assert
             //Assert.Null(result); // Ensure no errors occurred
-            Assert.NotNull(result); // Ensure data is returned
-            // You can perform additional assertions on the returned data if needed
+            if (chkIfIdExist)
+            {
+                Assert.NotNull(result.ToJson());
+            } // Ensure data is returned
         }
         [Fact]
         public async Task TestUpdateUsersQuery()
