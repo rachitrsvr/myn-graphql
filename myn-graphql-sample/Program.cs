@@ -22,7 +22,6 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(sqlConnectionString));
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<UserQueries>();
-//builder.Services.AddScoped<IRequestHandler<AddUserCommand, User>, AddUserCommandHandler>();
 
 builder.Services.AddGraphQLServer()
     .AddQueryType<UserQueries>()
@@ -32,6 +31,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //regiister MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+builder.Services.AddScoped<IRequestHandler<AddUserCommand, User>, AddUserCommandHandler>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
