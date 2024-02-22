@@ -8,93 +8,50 @@ namespace myn_graphql_sample.GraphQL.MutationTypes
 {
     public class UserMutations
     {
-        private readonly IMediator _mediator;
-        public UserMutations(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
         // Adds a new user based on the provided information.
         public async Task<User> AddUserAsync([Service] IMediator mediator, User input)
         {
             return await mediator.Send(new AddUserCommand(input));
         }
 
-
         // Updates a user based on the provided information.
-        public async Task<User> UpdateUserAsync(int id, string? firstName, string? lastName, string? email, string? address)
+        public async Task<User> UpdateUserAsync([Service] IMediator mediator, int id, string? firstName, string? lastName, string? email, string? address)
         {
            
-            User user = new User();
-
-            if (user == null)
-            {
-                return null; // or handle accordingly
-            }
-
+            User input = new User();
             // Update user properties
+            if (id != null)
+            {
+                input.Id = id;
+            }
             if (firstName != null)
             {
-                user.FirstName = firstName;
+                input.FirstName = firstName;
             }
             if (lastName != null)
             {
-                user.LastName = lastName;
+                input.LastName = lastName;
             }
             if (email != null)
             {
-                user.Email = email;
+                input.Email = email;
             }
             if (address != null)
             {
-                user.Address = address;
+                input.Address = address;
             }
 
             // Send command to update the user
-            return await _mediator.Send(new UpdateUserCommand(user));
+            return await mediator.Send(new UpdateUserCommand(input));
         }
 
-        // Updates a user with the specified ID and optional new information.
-        //public User UpdateUser([Service] IUserService userService,int id, string? firstName, string? lastName, string? email, string? address)
-        //{
-        //    User users = new User();
-        //    if (id <= 0)
-        //    {
-        //        return users;
-        //    }
-
-        //    User user = userService.GetUserById(id);
-
-        //    if (user == null)
-        //    {
-        //        return users;
-        //    }
-
-        //    if (firstName != null)
-        //    {
-        //        user.FirstName = firstName;
-        //    }
-        //    if (lastName != null)
-        //    {
-        //        user.LastName = lastName;
-        //    }
-        //    if (email != null)
-        //    {
-        //        user.Email = email;
-        //    }
-        //    if (address != null)
-        //    {
-        //        user.Address = address;
-        //    }
-
-        //    return userService.UpdateUser(user);
-        //}
-
-
-        // Deletes a user with the specified ID from the system.
-        public bool DeleteUser([Service] IUserService userService,int id)
+        public async Task<bool> DeleteUserAsync(int id, [Service] IMediator mediator)
         {
-            return userService.DeleteUser(id);
+            // Logic to prepare DeleteUserCommand
+            var deleteUserCommand = new DeleteUserCommand(id);
+
+            // Use mediator to send the command
+            return await mediator.Send(deleteUserCommand);
         }
     }
 }
