@@ -15,10 +15,10 @@ namespace myn_graphql_sample.Data.Handlers.Commands
 
         public async Task<User> Handle(AddUserCommand request, CancellationToken cancellationToken)
         {
-            _context.Users.Add(request.User);
-            await _context.SaveChangesAsync(cancellationToken);
+            _context.Users.Add(request.input);
+            _context.SaveChanges();
 
-            return request.User;
+            return request.input;
         }
 
     }

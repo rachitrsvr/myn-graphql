@@ -31,7 +31,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //regiister MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-builder.Services.AddScoped<IRequestHandler<AddUserCommand, User>, AddUserCommandHandler>();
 
 var app = builder.Build();
 
