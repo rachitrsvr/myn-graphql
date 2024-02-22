@@ -118,11 +118,20 @@ namespace xUnit.myn_graphql_sample
         {
             // Resolve the IRequestExecutor
             IRequestExecutor executor = await _resolver.GetRequestExecutorAsync();
+            // Get the total count of rows in the table
+            int totalCount = await _context.Users.CountAsync();
+
+            // Generate a random offset
+            Random random = new Random();
+            int randomOffset = random.Next(0, totalCount);
+
+            // Select a random row using the generated offset
+            var randomRow = await _context.Users.OrderBy(x => Guid.NewGuid()).Skip(randomOffset).FirstOrDefaultAsync();
 
             // Create and execute the query
             var request = QueryRequestBuilder.New()
-                .SetQuery(@"mutation {
-                      updateUser(id:6 
+                .SetQuery(@"mutation UpdateUser($id:ID!){
+                      updateUser(id:$id
                       , firstName: ""Reema""
                       , lastName: ""Kapoor""
                       , email: ""reema@example.com""
@@ -137,14 +146,19 @@ namespace xUnit.myn_graphql_sample
                         }
   
                     }")
+                 .AddVariableValue("id", randomRow.Id)
                 .Create();
 
             // Act
             IExecutionResult result = await executor.ExecuteAsync(request);
-
+            var updatedRow = _context.Users.Where(x => x.Id == randomRow.Id).FirstOrDefault();
+            if((updatedRow.FirstName == "Reema") && (updatedRow.LastName == "Kapoor") && (updatedRow.Email == "reema@example.com") && (updatedRow.Address == "NewAddress"))
+            {
+                Assert.NotNull(result.ToJson()); // Ensure data is returned
+            }
             // Assert
             //Assert.Null(result); // Ensure no errors occurred
-            Assert.NotNull(result); // Ensure data is returned
+         
             // You can perform additional assertions on the returned data if needed
         }
         [Fact]
