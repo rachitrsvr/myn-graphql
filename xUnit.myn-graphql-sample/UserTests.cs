@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using myn_graphql_sample.Data;
+using myn_graphql_sample.Entities;
 using myn_graphql_sample.GraphQL.MutationTypes;
 using myn_graphql_sample.GraphQL.QueryTypes;
+using myn_graphql_sample.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +19,8 @@ namespace xUnit.myn_graphql_sample
           .WithImage("postgres:15-alpine")
           .Build();
         private readonly IRequestExecutorResolver _resolver;
-
+        private readonly IServiceScopeFactory _scopeFactory;
+        private readonly AppDbContext _context;
         public UserTests()
         {
             var sqlConnectionString = "Host=localhost;Database=postgres;Username=postgres;Password=start;Port=5432";
@@ -25,6 +28,7 @@ namespace xUnit.myn_graphql_sample
             var services = new ServiceCollection();
             services
                  .AddDbContext<AppDbContext>(options => options.UseNpgsql(sqlConnectionString), ServiceLifetime.Scoped)
+                 .AddScoped<IUserService,UserService>()
                 .AddGraphQLServer()
                   .AddQueryType<UserQueries>()
     .AddMutationType<UserMutations>();
@@ -32,6 +36,15 @@ namespace xUnit.myn_graphql_sample
             // Build the service provider and resolve the IRequestExecutorResolver
             var serviceProvider = services.BuildServiceProvider();
             _resolver = serviceProvider.GetRequiredService<IRequestExecutorResolver>();
+            // Get IServiceScopeFactory
+            _scopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
+
+            // Create scope and resolve DbContext
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var service = scope.ServiceProvider;
+                _context = service.GetRequiredService<AppDbContext>();
+            }
         }
         public Task InitializeAsync()
         {
@@ -62,10 +75,11 @@ namespace xUnit.myn_graphql_sample
 
             // Act
             IExecutionResult result = await executor.ExecuteAsync(request);
-            var resultQuery = result.ExpectQueryResult;
+            var resultQuery = result.ToJson();
+            
             // Assert
             //Assert.Null(result); // Ensure no errors occurred
-            Assert.NotNull(result); // Ensure data is returned
+            Assert.NotNull(resultQuery); // Ensure data is returned
             // You can perform additional assertions on the returned data if needed
         }
 
@@ -74,7 +88,7 @@ namespace xUnit.myn_graphql_sample
         {
             // Resolve the IRequestExecutor
             IRequestExecutor executor = await _resolver.GetRequestExecutorAsync();
-
+            var data = _context.Users.ToList();
             // Create and execute the query
             var request = QueryRequestBuilder.New()
                 .SetQuery(@"mutation {
