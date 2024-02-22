@@ -25,11 +25,9 @@ namespace xUnit.myn_graphql_sample
             var services = new ServiceCollection();
             services
                  .AddDbContext<AppDbContext>(options => options.UseNpgsql(sqlConnectionString), ServiceLifetime.Scoped)
-                .AddGraphQL()
-                  .AddQueryType()
-                .AddMutationType()
-                .AddTypeExtension<UserQueries>()
-                .AddTypeExtension<UserMutations>();
+                .AddGraphQLServer()
+                  .AddQueryType<UserQueries>()
+    .AddMutationType<UserMutations>();
 
             // Build the service provider and resolve the IRequestExecutorResolver
             var serviceProvider = services.BuildServiceProvider();
@@ -64,7 +62,7 @@ namespace xUnit.myn_graphql_sample
 
             // Act
             IExecutionResult result = await executor.ExecuteAsync(request);
-
+            var resultQuery = result.ExpectQueryResult;
             // Assert
             //Assert.Null(result); // Ensure no errors occurred
             Assert.NotNull(result); // Ensure data is returned
@@ -100,7 +98,6 @@ namespace xUnit.myn_graphql_sample
 
             // Act
             IExecutionResult result = await executor.ExecuteAsync(request);
-
             // Assert
             //Assert.Null(result); // Ensure no errors occurred
             Assert.NotNull(result); // Ensure data is returned
