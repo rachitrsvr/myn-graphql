@@ -1,10 +1,13 @@
-﻿using myn_graphql_sample.Entities;
+﻿using MediatR;
+using myn_graphql_sample.Data.Requests.Commands;
+using myn_graphql_sample.Entities;
 using myn_graphql_sample.Repositories;
 
 namespace myn_graphql_sample.GraphQL.MutationTypes
 {
     public class UserMutations
     {
+        private readonly IMediator _mediator;
         // Adds a new user based on the provided information.
         public User AddUser([Service] IUserService userService,User input)
         {
@@ -12,8 +15,13 @@ namespace myn_graphql_sample.GraphQL.MutationTypes
             user.FirstName = input.FirstName;
             user.LastName = input.LastName;
             user.Address = input.Address;
-            return userService.AddUser(user);
+            userService.AddUser(user);
+
+            var Result = await _mediator.Send(new AddUserCommand(user));
+            return await _mediator.Publish(new TeacherAddedNotification(Result));
         }
+
+       
 
         // Updates a user with the specified ID and optional new information.
         public User UpdateUser([Service] IUserService userService,int id, string? firstName, string? lastName, string? email, string? address)

@@ -1,6 +1,10 @@
+using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using myn_graphql_sample.Data;
+using myn_graphql_sample.Data.Handlers.Commands;
+using myn_graphql_sample.Data.Requests.Commands;
+using myn_graphql_sample.Entities;
 using myn_graphql_sample.GraphQL.MutationTypes;
 using myn_graphql_sample.GraphQL.QueryTypes;
 using myn_graphql_sample.Repositories;
@@ -18,6 +22,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(sqlConnectionString));
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<UserQueries>();
+//builder.Services.AddScoped<IRequestHandler<AddUserCommand, User>, AddUserCommandHandler>();
 
 builder.Services.AddGraphQLServer()
     .AddQueryType<UserQueries>()
