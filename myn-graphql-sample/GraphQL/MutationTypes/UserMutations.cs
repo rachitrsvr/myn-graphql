@@ -9,7 +9,7 @@ namespace myn_graphql_sample.GraphQL.MutationTypes
     {
         private readonly IMediator _mediator;
         // Adds a new user based on the provided information.
-        public User AddUser([Service] IUserService userService,User input)
+        public async Task<User> AddUserAsync([Service] IUserService userService,User input)
         {
             User user = new User();
             user.FirstName = input.FirstName;
@@ -17,8 +17,7 @@ namespace myn_graphql_sample.GraphQL.MutationTypes
             user.Address = input.Address;
             userService.AddUser(user);
 
-            var Result = await _mediator.Send(new AddUserCommand(user));
-            return await _mediator.Publish(new TeacherAddedNotification(Result));
+            return (User)await _mediator.Send(new AddUserCommand(user));
         }
 
        
