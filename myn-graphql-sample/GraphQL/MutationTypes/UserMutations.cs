@@ -16,8 +16,7 @@ namespace myn_graphql_sample.GraphQL.MutationTypes
             user.LastName = input.LastName;
             user.Address = input.Address;
             userService.AddUser(user);
-
-            return (User)await _mediator.Send(new AddUserCommand(user));
+            return await _mediator.Send(new AddUserCommand(user));
         }
 
        

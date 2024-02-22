@@ -20,5 +20,6 @@ namespace myn_graphql_sample.Data.Handlers.Commands
 
             return request.User;
         }
+
     }
 }
