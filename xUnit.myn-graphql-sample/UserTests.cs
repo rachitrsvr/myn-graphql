@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.TestPlatform.TestHost;
 using myn_graphql_sample.Data;
 using myn_graphql_sample.Entities;
 using myn_graphql_sample.GraphQL.MutationTypes;
@@ -7,9 +9,12 @@ using myn_graphql_sample.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Testcontainers.PostgreSql;
+using MediatR;
+using myn_graphql_sample.Data.Requests.Commands;
 
 namespace xUnit.myn_graphql_sample
 {
@@ -28,9 +33,14 @@ namespace xUnit.myn_graphql_sample
             services
                  .AddDbContext<AppDbContext>(options => options.UseNpgsql(sqlConnectionString), ServiceLifetime.Scoped)
                  .AddScoped<IUserService, UserService>()
+                 .AddScoped<UserQueries>()
+                 .AddScoped<UserMutations>()
+
                 .AddGraphQLServer()
                   .AddQueryType<UserQueries>()
     .AddMutationType<UserMutations>();
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+    
 
             // Build the service provider and resolve the IRequestExecutorResolver
             var serviceProvider = services.BuildServiceProvider();
