@@ -6,20 +6,11 @@ using myn_graphql_sample.GraphQL.MutationTypes;
 using myn_graphql_sample.GraphQL.QueryTypes;
 using myn_graphql_sample.Repositories;
 using System.Reflection;
-using Serilog;
-using Serilog.Events;
-using System;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
-
-
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 var sqlConnectionString = builder.Configuration["ConnectionString"];
-
-//Configure Serilog
 
 
 // Add services to the container.
@@ -37,14 +28,17 @@ builder.Services.AddSwaggerGen();
 //regiister MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
+//builder.Host.ConfigureLogging(logging =>
+//{
+//    logging.ClearProviders();
+//    logging.AddConsole();
+//});
+
+
 var app = builder.Build();
 //var loggerFactory = app.Services.GetService<ILoggerFactory>();
 //loggerFactory.AddProvider(builder.Configuration["Logging:LogFilePath"].ToString());
 // Configure the HTTP request pipeline.
-
-var loggerFactory = app.Services.GetService<ILoggerFactory>();
-loggerFactory.AddFile(builder.Configuration["LogFilePath"].ToString());
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

@@ -7,7 +7,8 @@ namespace myn_graphql_sample.Data.Handlers.Commands
     public class AddUserCommandHandler : IRequestHandler<AddUserCommand, User>
     {
         private readonly AppDbContext _context;
-        private readonly ILogger<AddUserCommand> _logger;
+        private readonly ILogger _logger;
+
         public AddUserCommandHandler(AppDbContext context, ILogger<AddUserCommand> logger)
         {
             _context = context;
@@ -18,7 +19,6 @@ namespace myn_graphql_sample.Data.Handlers.Commands
         {
             try
             {
-                _logger.LogError("Test AddUserCommandHandler");
                 _context.Users.Add(request.input);
                 _context.SaveChanges();
 
@@ -26,10 +26,11 @@ namespace myn_graphql_sample.Data.Handlers.Commands
             }
             catch (Exception ex)
             {
-                _logger.LogError("Message", ex.Message);
+                _logger.LogInformation("AddUserCommandHandler: Exception- " + ex.Message,
+                DateTime.UtcNow.ToLongTimeString());
                 throw;
             }
-            
+           
         }
 
     }
