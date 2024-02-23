@@ -126,16 +126,16 @@ namespace xUnit.myn_graphql_sample
             int randomOffset = random.Next(0, totalCount);
 
             // Select a random row using the generated offset
-            var randomRow = await _context.Users.OrderBy(x => Guid.NewGuid()).Skip(randomOffset).FirstOrDefaultAsync();
+            var randomRow = await _context.Users.OrderBy(x => x.Id).Skip(randomOffset).FirstOrDefaultAsync();
 
             // Create and execute the query
             var request = QueryRequestBuilder.New()
-                .SetQuery(@"mutation UpdateUser($id:ID!){
+                .SetQuery(@"mutation UpdateUser($id: Int!){
                       updateUser(id:$id
-                      , firstName: ""Reema""
-                      , lastName: ""Kapoor""
-                      , email: ""reema@example.com""
-                      , address: ""NewAddress"" 
+                       firstName: ""Reema""
+                       lastName: ""Kapoor""
+                       email: ""reema@example.com""
+                       address: ""NewAddress"" 
                       ) 
                          {
                           id
