@@ -19,11 +19,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 var sqlConnectionString = builder.Configuration["ConnectionString"];
 
-// Configure Serilog
-//Log.Logger = new LoggerConfiguration()
-//    .WriteTo.Console()
-//    .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
-//    .CreateLogger();
+//Configure Serilog
+
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -44,6 +41,10 @@ var app = builder.Build();
 //var loggerFactory = app.Services.GetService<ILoggerFactory>();
 //loggerFactory.AddProvider(builder.Configuration["Logging:LogFilePath"].ToString());
 // Configure the HTTP request pipeline.
+
+var loggerFactory = app.Services.GetService<ILoggerFactory>();
+loggerFactory.AddFile(builder.Configuration["LogFilePath"].ToString());
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
