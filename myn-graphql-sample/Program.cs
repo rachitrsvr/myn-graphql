@@ -1,23 +1,31 @@
 using MediatR;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using myn_graphql_sample.Data;
-using myn_graphql_sample.Data.Handlers.Commands;
-using myn_graphql_sample.Data.Requests.Commands;
 using myn_graphql_sample.Entities;
 using myn_graphql_sample.GraphQL.MutationTypes;
 using myn_graphql_sample.GraphQL.QueryTypes;
 using myn_graphql_sample.Repositories;
-using System;
 using System.Reflection;
+using Serilog;
+using Serilog.Events;
+using System;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 var sqlConnectionString = builder.Configuration["ConnectionString"];
+
+// Configure Serilog
+//Log.Logger = new LoggerConfiguration()
+//    .WriteTo.Console()
+//    .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
+//    .CreateLogger();
+
 // Add services to the container.
-
-
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(sqlConnectionString));
 builder.Services.AddScoped<IUserService, UserService>();
@@ -33,7 +41,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
 var app = builder.Build();
-
+//var loggerFactory = app.Services.GetService<ILoggerFactory>();
+//loggerFactory.AddProvider(builder.Configuration["Logging:LogFilePath"].ToString());
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -42,11 +51,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapGraphQL();
-
 app.MapControllers();
-
 app.Run();
