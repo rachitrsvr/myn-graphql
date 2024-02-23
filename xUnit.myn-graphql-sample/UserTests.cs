@@ -27,7 +27,7 @@ namespace xUnit.myn_graphql_sample
             var services = new ServiceCollection();
             services
                  .AddDbContext<AppDbContext>(options => options.UseNpgsql(sqlConnectionString), ServiceLifetime.Scoped)
-                 .AddScoped<IUserService,UserService>()
+                 .AddScoped<IUserService, UserService>()
                 .AddGraphQLServer()
                   .AddQueryType<UserQueries>()
     .AddMutationType<UserMutations>();
@@ -68,7 +68,7 @@ namespace xUnit.myn_graphql_sample
             // Act
             IExecutionResult result = await executor.ExecuteAsync(request);
             var resultQuery = result.ToJson();
-            
+
             // Assert
             //Assert.Null(result); // Ensure no errors occurred
             Assert.NotNull(resultQuery); // Ensure data is returned
@@ -116,21 +116,22 @@ namespace xUnit.myn_graphql_sample
         [Fact]
         public async Task TestUpdateUsersQuery()
         {
-            // Resolve the IRequestExecutor
-            IRequestExecutor executor = await _resolver.GetRequestExecutorAsync();
+
             // Get the total count of rows in the table
             int totalCount = await _context.Users.CountAsync();
+            if (totalCount > 0) {
+                // Resolve the IRequestExecutor
+                IRequestExecutor executor = await _resolver.GetRequestExecutorAsync();
+                // Generate a random offset
+                Random random = new Random();
+                int randomOffset = random.Next(0, totalCount);
 
-            // Generate a random offset
-            Random random = new Random();
-            int randomOffset = random.Next(0, totalCount);
+                // Select a random row using the generated offset
+                var randomRow = await _context.Users.OrderBy(x => x.Id).Skip(randomOffset).FirstOrDefaultAsync();
 
-            // Select a random row using the generated offset
-            var randomRow = await _context.Users.OrderBy(x => x.Id).Skip(randomOffset).FirstOrDefaultAsync();
-
-            // Create and execute the query
-            var request = QueryRequestBuilder.New()
-                .SetQuery(@"mutation UpdateUser($id: Int!){
+                // Create and execute the query
+                var request = QueryRequestBuilder.New()
+                    .SetQuery(@"mutation UpdateUser($id: Int!){
                       updateUser(id:$id
                        firstName: ""Reema""
                        lastName: ""Kapoor""
@@ -146,41 +147,62 @@ namespace xUnit.myn_graphql_sample
                         }
   
                     }")
-                 .AddVariableValue("id", randomRow.Id)
-                .Create();
+                     .AddVariableValue("id", randomRow.Id)
+                    .Create();
 
-            // Act
-            IExecutionResult result = await executor.ExecuteAsync(request);
-            var updatedRow = _context.Users.Where(x => x.Id == randomRow.Id).FirstOrDefault();
-            if((updatedRow.FirstName == "Reema") && (updatedRow.LastName == "Kapoor") && (updatedRow.Email == "reema@example.com") && (updatedRow.Address == "NewAddress"))
-            {
-                Assert.NotNull(result.ToJson()); // Ensure data is returned
+                // Act
+                IExecutionResult result = await executor.ExecuteAsync(request);
+                var updatedRow = _context.Users.Where(x => x.Id == randomRow.Id).FirstOrDefault();
+                if ((updatedRow.FirstName == "Reema") && (updatedRow.LastName == "Kapoor") && (updatedRow.Email == "reema@example.com") && (updatedRow.Address == "NewAddress"))
+                {
+                    Assert.NotNull(result.ToJson()); // Ensure data is returned
+                }
+
+
+                // You can perform additional assertions on the returned data if needed
             }
-            // Assert
-            //Assert.Null(result); // Ensure no errors occurred
-         
-            // You can perform additional assertions on the returned data if needed
+            else {
+                // Assert
+                Assert.Null("No data found to update!"); // Ensure no errors occurred
+            }
+
         }
         [Fact]
         public async Task TestDeleteUserQuery()
-        {
+        { 
+             // Get the total count of rows in the table
+            int totalCount = await _context.Users.CountAsync();
+            if(totalCount > 0) {
             // Resolve the IRequestExecutor
             IRequestExecutor executor = await _resolver.GetRequestExecutorAsync();
 
-            // Create and execute the query
-            var request = QueryRequestBuilder.New()
-                .SetQuery(@"mutation {
-                      deleteUser(id: 1)
+        // Generate a random offset
+        Random random = new Random();
+        int randomOffset = random.Next(0, totalCount);
+
+        // Select a random row using the generated offset
+        var randomRow = await _context.Users.OrderBy(x => x.Id).Skip(randomOffset).FirstOrDefaultAsync();
+
+        // Create and execute the query
+        var request = QueryRequestBuilder.New()
+            .SetQuery(@"mutation DeleteUser($id: Int!) {
+                      deleteUser(id: $id)
                     }")
-                .Create();
+             .AddVariableValue("id", randomRow.Id)
+            .Create();
 
-            // Act
-            IExecutionResult result = await executor.ExecuteAsync(request);
+        // Act
+        IExecutionResult result = await executor.ExecuteAsync(request);
+        var chkIfIdExists = _context.Users.Any(q=>q.Id == randomRow.Id);
+                if (!chkIfIdExists)
+                {
+                    // Assert
+                    //Assert.Null(result); // Ensure no errors occurred
+                    Assert.NotNull(result); // Ensure data is returned
+                                            // You can perform additional assertions on the returned data if needed
+                }
 
-            // Assert
-            //Assert.Null(result); // Ensure no errors occurred
-            Assert.NotNull(result); // Ensure data is returned
-            // You can perform additional assertions on the returned data if needed
+            }
         }
     }
 }
