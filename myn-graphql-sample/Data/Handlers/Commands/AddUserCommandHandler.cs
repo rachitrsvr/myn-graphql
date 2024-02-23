@@ -26,7 +26,7 @@ namespace myn_graphql_sample.Data.Handlers.Commands
             }
             catch (Exception ex)
             {
-                _logger.LogInformation("AddUserCommandHandler: Exception- " + ex.Message,
+                _logger.LogError("AddUserCommandHandler: Exception- " + ex.Message,
                 DateTime.UtcNow.ToLongTimeString());
                 throw;
             }
