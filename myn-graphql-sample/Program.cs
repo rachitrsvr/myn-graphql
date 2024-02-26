@@ -36,23 +36,44 @@ builder.Services.AddLogging(builder =>
                           // Add other logging providers if needed (e.g., AddDebug, AddEventLog, etc.)
 });
 
+// Build the application
 var app = builder.Build();
 
+// Check if the environment is set to development
 if (app.Environment.IsDevelopment())
 {
+    // Enable Swagger for API documentation
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+// Log information about adding routes
 app.Logger.LogInformation("Adding Routes");
+
+// Define a GraphQL endpoint using MapGet
 app.MapGet("/graphql", async (ILogger<Program> logger, HttpResponse response) =>
 {
+    // Log information for testing purposes
     logger.LogInformation("Testing logging in Program.cs");
-    //await response.WriteAsync("Testing");
+    // Uncomment the line below if you want to send a response
+    // await response.WriteAsync("Testing");
 });
+
+// Log information about starting the app
 app.Logger.LogInformation("Starting the app");
+
+// Enable HTTPS redirection
 app.UseHttpsRedirection();
+
+// Enable authorization
 app.UseAuthorization();
+
+// Map GraphQL endpoint
 app.MapGraphQL();
+
+// Map controllers
 app.MapControllers();
+
+// Run the application
 app.Run();
+
