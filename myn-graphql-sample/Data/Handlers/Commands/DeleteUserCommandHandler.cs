@@ -1,15 +1,16 @@
 ﻿using MediatR;
 using myn_graphql_sample.Data.Requests.Commands;
 using myn_graphql_sample.Entities;
+using Microsoft.Extensions.Logging.Console;
 
 namespace myn_graphql_sample.Data.Handlers.Commands
 {
     public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, bool>
     {
         private readonly AppDbContext _context;
-        private readonly ILogger _logger;
+        private readonly ILogger<DeleteUserCommandHandler> _logger;
 
-        public DeleteUserCommandHandler(AppDbContext context, ILogger<AddUserCommand> logger)
+        public DeleteUserCommandHandler(AppDbContext context, ILogger<DeleteUserCommandHandler> logger)
         {
             _context = context;
             _logger = logger;
@@ -37,8 +38,8 @@ namespace myn_graphql_sample.Data.Handlers.Commands
             }
             catch (Exception ex)
             {
-                _logger.LogInformation("DeleteUserCommandHandler: Exception" + ex.Message);
-
+                //_logger.LogInformation("DeleteUserCommandHandler: Exception" + ex.Message);
+                _logger.LogError(ex, "Exception occurred while processing DeleteUserCommand");
                 return true;
             }
            

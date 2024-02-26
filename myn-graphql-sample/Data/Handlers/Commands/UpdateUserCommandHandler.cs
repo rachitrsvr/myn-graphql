@@ -1,15 +1,16 @@
 ﻿using MediatR;
 using myn_graphql_sample.Data.Requests.Commands;
 using myn_graphql_sample.Entities;
+using Microsoft.Extensions.Logging.Console;
 
 namespace myn_graphql_sample.Data.Handlers.Commands
 {
     public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, User>
     {
         private readonly AppDbContext _context;
-        private readonly ILogger _logger;
+        private readonly ILogger<UpdateUserCommand> _logger;
 
-        public UpdateUserCommandHandler(AppDbContext context, ILogger<AddUserCommand> logger)
+        public UpdateUserCommandHandler(AppDbContext context, ILogger<UpdateUserCommand> logger)
         {
             _context = context;
             _logger = logger;
@@ -41,7 +42,8 @@ namespace myn_graphql_sample.Data.Handlers.Commands
             }
             catch (Exception ex)
             {
-                _logger.LogInformation("UpdateUserCommandHandler: Exception" + ex.Message);
+                //_logger.LogInformation("UpdateUserCommandHandler: Exception" + ex.Message);
+                _logger.LogError(ex, "Exception occurred while processing UpdateUserCommand");
                 return null;
             }
            
