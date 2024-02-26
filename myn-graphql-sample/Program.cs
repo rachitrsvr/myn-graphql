@@ -13,6 +13,7 @@ builder.Logging.AddConsole();
 var sqlConnectionString = builder.Configuration["ConnectionString"];
 
 
+
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(sqlConnectionString));
@@ -34,6 +35,11 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.Get
 //    logging.AddConsole();
 //});
 
+builder.Services.AddLogging(builder =>
+{
+    builder.AddConsole(); // Configures console logging
+                          // Add other logging providers if needed (e.g., AddDebug, AddEventLog, etc.)
+});
 
 var app = builder.Build();
 //var loggerFactory = app.Services.GetService<ILoggerFactory>();
