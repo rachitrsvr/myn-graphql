@@ -15,6 +15,8 @@ using System.Threading.Tasks;
 using Testcontainers.PostgreSql;
 using MediatR;
 using myn_graphql_sample.Data.Requests.Commands;
+using myn_graphql_sample.Data.Handlers;
+using myn_graphql_sample.Data.Handlers.Commands;
 
 namespace xUnit.myn_graphql_sample
 {
@@ -28,6 +30,7 @@ namespace xUnit.myn_graphql_sample
         public UserTests()
         {
             var sqlConnectionString = "Host=localhost;Database=MYN_Test_DB;Username=postgres;Password=start;Port=5432";
+            var assembly = Assembly.Load("myn-graphql-sample");
             // Initialize the service collection and configure HotChocolate
             var services = new ServiceCollection();
             services
@@ -39,8 +42,9 @@ namespace xUnit.myn_graphql_sample
                 .AddGraphQLServer()
                   .AddQueryType<UserQueries>()
     .AddMutationType<UserMutations>();
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-    
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly));
+            //services.AddMediatR(Assembly.GetAssembly(typeof(AddUserCommand)));
+
 
             // Build the service provider and resolve the IRequestExecutorResolver
             var serviceProvider = services.BuildServiceProvider();
@@ -88,6 +92,9 @@ namespace xUnit.myn_graphql_sample
         [Fact]
         public async Task TestAddUsersQuery()
         {
+            //Arrange
+            //var mediator = new Mock<IMediator>();
+
             // Resolve the IRequestExecutor
             IRequestExecutor executor = await _resolver.GetRequestExecutorAsync();
             var NewId = _context.Users.Max(entity => (int?)entity.Id) + 1;
