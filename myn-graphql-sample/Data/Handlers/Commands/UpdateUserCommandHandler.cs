@@ -41,7 +41,7 @@ namespace myn_graphql_sample.Data.Handlers.Commands
             }
             catch (Exception ex)
             {
-                _logger.LogInformation("UpdateUserCommandHandler" + ex.Message);
+                _logger.LogInformation("UpdateUserCommandHandler: Exception" + ex.Message);
                 return null;
             }
            

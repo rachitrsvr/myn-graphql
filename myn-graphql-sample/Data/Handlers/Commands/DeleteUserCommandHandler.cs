@@ -37,7 +37,7 @@ namespace myn_graphql_sample.Data.Handlers.Commands
             }
             catch (Exception ex)
             {
-                _logger.LogInformation("DeleteUserCommandHandler" + ex.Message);
+                _logger.LogInformation("DeleteUserCommandHandler: Exception" + ex.Message);
 
                 return true;
             }

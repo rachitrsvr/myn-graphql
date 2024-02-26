@@ -21,12 +21,11 @@ namespace myn_graphql_sample.Data.Handlers.Commands
             {
                 _context.Users.Add(request.input);
                 _context.SaveChanges();
-
                 return request.input;
             }
             catch (Exception ex)
             {
-                _logger.LogInformation("AddUserCommandHandler" + ex.Message);
+                _logger.LogInformation("AddUserCommandHandler: Exception" + ex.Message);
                 throw;
             }
            

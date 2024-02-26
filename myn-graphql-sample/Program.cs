@@ -29,11 +29,6 @@ builder.Services.AddSwaggerGen();
 //regiister MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
-//builder.Host.ConfigureLogging(logging =>
-//{
-//    logging.ClearProviders();
-//    logging.AddConsole();
-//});
 
 builder.Services.AddLogging(builder =>
 {
@@ -42,9 +37,7 @@ builder.Services.AddLogging(builder =>
 });
 
 var app = builder.Build();
-//var loggerFactory = app.Services.GetService<ILoggerFactory>();
-//loggerFactory.AddProvider(builder.Configuration["Logging:LogFilePath"].ToString());
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
