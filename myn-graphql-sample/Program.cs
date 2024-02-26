@@ -44,6 +44,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.Logger.LogInformation("Adding Routes");
+app.MapGet("/graphql", async (ILogger<Program> logger, HttpResponse response) =>
+{
+    logger.LogInformation("Testing logging in Program.cs");
+    //await response.WriteAsync("Testing");
+});
+app.Logger.LogInformation("Starting the app");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapGraphQL();
