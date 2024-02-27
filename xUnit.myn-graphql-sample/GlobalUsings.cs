@@ -4,3 +4,5 @@ global using myn_graphql_sample;
 global using HotChocolate;
 global using HotChocolate.Execution;
 global using Xunit;
+global using Npgsql;
+global using Microsoft.EntityFrameworkCore;

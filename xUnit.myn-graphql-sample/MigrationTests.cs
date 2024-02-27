@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Npgsql;
 
 namespace xUnit.myn_graphql_sample
 {
@@ -13,15 +14,16 @@ namespace xUnit.myn_graphql_sample
     {
         private ServiceProvider _serviceProvider;
         //private string DataSource = "Data Source=C:\\Projects\\myn-graphql\\xUnit.myn-graphql-sample\\myn-sqlite.db";
-        private string DataSource = "Data Source=myn-sqlite.db";
+        private string DataSource = "Host=localhost;Database=postgres;Username=postgres;Password=start;Port=5432";
         public MigrationTests()
         {
             // Set up FluentMigrator services
             _serviceProvider = new ServiceCollection()
                 .AddFluentMigratorCore()
                 .ConfigureRunner(rb => rb
-                    .AddSQLite()
-                    .WithGlobalConnectionString(DataSource)
+                    .AddPostgres()
+                // Set the connection string
+                  .WithGlobalConnectionString(DataSource)
                     .ScanIn(typeof(MigrationTests).Assembly).For.Migrations())
                 .AddLogging(lb => lb.AddFluentMigratorConsole())
                 .BuildServiceProvider();
@@ -38,15 +40,15 @@ namespace xUnit.myn_graphql_sample
             }
 
             // Add your test logic here
-            // Set up an in-memory SQLite database for testing
-            var connection = new SqliteConnection(DataSource);
+            // Set up an  Npgsql database for testing
+            var connection = new NpgsqlConnection(DataSource);
             connection.Open();
 
             try
             {
                 // Set up DbContext with SQLite connection
                 var options = new DbContextOptionsBuilder<AppDbContext>()
-                    .UseSqlite(connection)
+                    .UseNpgsql(connection)
                     .Options;
 
                 // Apply migrations for testing
@@ -62,6 +64,10 @@ namespace xUnit.myn_graphql_sample
 
                 }
             }
+            catch(Exception ex)
+            {
+
+            }
             finally
             {
                 connection.Close();
@@ -71,7 +77,7 @@ namespace xUnit.myn_graphql_sample
         {
             using (var command = context.Database.GetDbConnection().CreateCommand())
             {
-                command.CommandText = $"SELECT name FROM sqlite_master WHERE type='table' AND name='{tableName}'";
+                command.CommandText = $"SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = '{tableName}')";
                 context.Database.OpenConnection(); // Open the connection
                 using (var result = command.ExecuteReader())
                 {
