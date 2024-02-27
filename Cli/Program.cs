@@ -15,6 +15,7 @@ using Oakton;
             // that all resources will be disposed.
             UpdateDatabase(scope.ServiceProvider);
         }
+        //return await app.RunOaktonCommands(args);
     }
     /// <summary>
     /// Configure the dependency injection services
@@ -28,7 +29,7 @@ using Oakton;
                 // Add SQLite support to FluentMigrator
                 .AddPostgres()
                 // Set the connection string
-                .WithGlobalConnectionString("Host=localhost;Database=MYN_Test_DB;Username=postgres;Password=start;Port=5432")
+                .WithGlobalConnectionString("Host=localhost;Database=postgres;Username=postgres;Password=start;Port=5432")
                 // Define the assembly containing the migrations
                 .ScanIn(typeof(Program).Assembly).For.Migrations())
             // Enable logging to console in the FluentMigrator way
