@@ -5,7 +5,9 @@ VisualStudioVersion = 17.8.34408.163
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "myn-graphql-sample", "myn-graphql-sample\myn-graphql-sample.csproj", "{415028F9-6131-4EDA-A175-B86F8D0DBDB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xUnit.myn-graphql-sample", "xUnit.myn-graphql-sample\xUnit.myn-graphql-sample.csproj", "{BED720D2-9C31-46E6-919A-6408EF500B08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xUnit.myn-graphql-sample", "xUnit.myn-graphql-sample\xUnit.myn-graphql-sample.csproj", "{BED720D2-9C31-46E6-919A-6408EF500B08}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{73F06865-C45E-4D75-99CF-644593DB4C07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{BED720D2-9C31-46E6-919A-6408EF500B08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BED720D2-9C31-46E6-919A-6408EF500B08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BED720D2-9C31-46E6-919A-6408EF500B08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73F06865-C45E-4D75-99CF-644593DB4C07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73F06865-C45E-4D75-99CF-644593DB4C07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73F06865-C45E-4D75-99CF-644593DB4C07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73F06865-C45E-4D75-99CF-644593DB4C07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

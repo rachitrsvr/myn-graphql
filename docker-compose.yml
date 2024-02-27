@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  myn-graphql-sample:
+    image: ${DOCKER_REGISTRY-}myngraphqlsample
+    build:
+      context: .
+      dockerfile: myn-graphql-sample\Dockerfile
