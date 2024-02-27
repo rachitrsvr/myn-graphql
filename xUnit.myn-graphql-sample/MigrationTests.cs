@@ -12,7 +12,8 @@ namespace xUnit.myn_graphql_sample
     public class MigrationTests
     {
         private ServiceProvider _serviceProvider;
-
+        //private string DataSource = "Data Source=C:\\Projects\\myn-graphql\\xUnit.myn-graphql-sample\\myn-sqlite.db";
+        private string DataSource = "Data Source=myn-sqlite.db";
         public MigrationTests()
         {
             // Set up FluentMigrator services
@@ -20,7 +21,7 @@ namespace xUnit.myn_graphql_sample
                 .AddFluentMigratorCore()
                 .ConfigureRunner(rb => rb
                     .AddSQLite()
-                    .WithGlobalConnectionString("Data Source=:memory:")
+                    .WithGlobalConnectionString(DataSource)
                     .ScanIn(typeof(MigrationTests).Assembly).For.Migrations())
                 .AddLogging(lb => lb.AddFluentMigratorConsole())
                 .BuildServiceProvider();
@@ -38,7 +39,7 @@ namespace xUnit.myn_graphql_sample
 
             // Add your test logic here
             // Set up an in-memory SQLite database for testing
-            var connection = new SqliteConnection("DataSource=:memory:");
+            var connection = new SqliteConnection(DataSource);
             connection.Open();
 
             try
@@ -52,19 +53,30 @@ namespace xUnit.myn_graphql_sample
                 using (var context = new AppDbContext(options))
                 {
                     context.Database.EnsureCreated(); // Ensure database is created
-                                                      // Check if the table exists in the database
-                    var isTableExists = context.Database.GetAppliedMigrations().Any();
+                                                      
+                    
+                    string tableName = "Users";
+                    bool exists = TableExists(context, tableName); // Check if the table exists in the database
                     // Assert that tables or columns created/modified by migration exist
-                    Assert.True(isTableExists, "Users table should exist");
+                    Assert.True(exists, "Users table should exist");
 
-                    // Assert that data inserted/modified by migration is present
-                    //var user = context.Users.FirstOrDefault(u => u.FirstName == "John");
-                    //Assert.NotNull(user);
                 }
             }
             finally
             {
                 connection.Close();
+            }
+        }
+        static bool TableExists(DbContext context, string tableName)
+        {
+            using (var command = context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = $"SELECT name FROM sqlite_master WHERE type='table' AND name='{tableName}'";
+                context.Database.OpenConnection(); // Open the connection
+                using (var result = command.ExecuteReader())
+                {
+                    return result.HasRows;
+                }
             }
         }
     }
