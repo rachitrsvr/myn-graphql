@@ -16,7 +16,7 @@ namespace Myn.GraphQL.Tests
         public UserTests()
         {
             var sqlConnectionString = "Host=localhost;Database=MYN_Test_DB;Username=postgres;Password=start;Port=5432";
-            var assembly = Assembly.Load("myn-graphql-sample");
+            var assembly = Assembly.Load("Myn.GraphQL.Api");
             // Initialize the service collection and configure HotChocolate
             var services = new ServiceCollection();
             services
