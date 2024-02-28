@@ -16,6 +16,7 @@
     <PackageReference Include="FluentMigrator.Runner" Version="5.1.0" />
     <PackageReference Include="FluentMigrator.Runner.Postgres" Version="5.1.0" />
     <PackageReference Include="FluentMigrator.Runner.SQLite" Version="5.1.0" />
+    <PackageReference Include="LanguageExt.Core" Version="4.4.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.16" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
     <PackageReference Include="Npgsql" Version="7.0.6" />
