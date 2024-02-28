@@ -6,3 +6,4 @@ global using HotChocolate.Execution;
 global using Xunit;
 global using Npgsql;
 global using Microsoft.EntityFrameworkCore;
+global using MediatR;
