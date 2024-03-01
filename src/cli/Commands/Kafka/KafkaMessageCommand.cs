@@ -9,7 +9,9 @@ public class KafkaMessageCommand(IMigrationRunner runner) : OaktonCommand<EmptyI
 {
     public override bool Execute(EmptyInput input)
     {
-        runner.MigrateUp();
+        IConfiguration configuration = new ConfigurationBuilder()
+            
+            .Build();
         return true;
     }
 }
