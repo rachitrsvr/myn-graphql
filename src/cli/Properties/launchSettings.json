@@ -7,6 +7,13 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "https://localhost:51333;http://localhost:51334"
+    },
+    "kafka-produce-messages": {
+      "commandName": "Project",
+      "commandLineArgs": "kafka-produce-messages",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+      }
     }
   }
 }
