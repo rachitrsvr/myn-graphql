@@ -12,7 +12,7 @@
       "commandName": "Project",
       "commandLineArgs": "kafka-produce-messages",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
   }
