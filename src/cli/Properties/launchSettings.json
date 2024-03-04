@@ -14,6 +14,13 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    },
+    "kafka-consume-messages": {
+      "commandName": "Project",
+      "commandLineArgs": "kafka-consume-messages",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
     }
   }
 }
