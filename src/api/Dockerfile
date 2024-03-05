@@ -27,7 +27,7 @@ COPY --from=build-env /app/out .
 EXPOSE 80
 
 # Define the environment variables required for PostgreSQL connection
-ENV ConnectionStrings__DefaultConnection="Host=localhost;Port=5432;Database=MYN_Test_DB;Username=postgres;Password=start"
+ENV ConnectionStrings__DefaultConnection="Host=postgres;Port=5432;Database=MYN_Test_DB;Username=postgres;Password=start"
 
 # Install PostgreSQL client
 RUN apt-get update && apt-get install -y postgresql-client

@@ -1,4 +1,5 @@
 ﻿using FluentMigrator.Runner;
+using Myn.GraphQL.Cli.Commands.Database;
 using Myn.GraphQL.Cli.Core;
 
 var assembly = typeof(Program).Assembly;
@@ -13,12 +14,14 @@ builder.Services
         // Add SQLite support to FluentMigrator
         .AddPostgres()
         // Set the connection string
-        .WithGlobalConnectionString("Host=localhost;Database=postgres;Username=postgres;Password=start;Port=5432")
+        .WithGlobalConnectionString("Host=postgres;Database=postgres;Username=postgres;Password=start;Port=5432")
         // Define the assembly containing the migrations
         .ScanIn(typeof(Program).Assembly).For.Migrations())
     // Enable logging to console in the FluentMigrator way
     .AddLogging(lb => lb.AddFluentMigratorConsole())
     .BuildServiceProvider();
+
+builder.Services.AddScoped<MigrateDatabaseCommand>();
 
 var app = builder.Build();
 
