@@ -1,6 +1,15 @@
 version: '3.8'
 
 services:
+
+  postgres:
+    image: debezium/postgres:13
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=exampledb
   zookeeper:
     image: wurstmeister/zookeeper
     container_name: zookeeper-test
@@ -21,3 +30,18 @@ services:
       KAFKA_CREATE_TOPICS: "my-topic:1:1"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+  
+  debezium:
+    image: debezium/connect:1.4
+    environment:
+      BOOTSTRAP_SERVERS: kafka:9092
+      GROUP_ID: 1
+      CONFIG_STORAGE_TOPIC: connect_configs
+      OFFSET_STORAGE_TOPIC: connect_offsets
+      KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
+      VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+    depends_on: [kafka]
+    ports:
+      - 8083:8083
