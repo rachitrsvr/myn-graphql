@@ -7,8 +7,6 @@ namespace Myn.GraphQL.Cli.Commands.Kafka
     [Description("Migrate The Database", Name = "kafka-consume-messages")]
     public class KafkaConsumerMessagesCommand : OaktonCommand<EmptyInput>
     {
-        const string Topic = "cn-accounts";
-        const string BootstrapServers = "172.18.0.3:9092";
 
         public override bool Execute(EmptyInput input)
         {
