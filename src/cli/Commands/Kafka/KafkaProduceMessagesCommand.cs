@@ -15,7 +15,7 @@ public class KafkaProduceMessagesCommand : OaktonCommand<EmptyInput>
     {
         var config = new ProducerConfig
         {
-            BootstrapServers = "localhost:9094"
+            BootstrapServers = "localhost:9092"
         };
 
 

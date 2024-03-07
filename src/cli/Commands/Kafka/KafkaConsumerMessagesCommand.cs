@@ -12,7 +12,7 @@ namespace Myn.GraphQL.Cli.Commands.Kafka
         {
             var config = new ConsumerConfig
             {
-                BootstrapServers = "localhost:9094",
+                BootstrapServers = "localhost:9092",
                 GroupId = "test-consumer-group",
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
