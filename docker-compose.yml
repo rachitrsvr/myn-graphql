@@ -151,4 +151,8 @@ services:
       timeout: 5s
       retries: 5
     volumes:
+<<<<<<< HEAD
       - ./scripts:/docker-entrypoint-initdb.d
+=======
+      - ./scripts:/docker-entrypoint-initdb.d
+>>>>>>> 32599e526d73c606fc38461bd09f99058feceef7
