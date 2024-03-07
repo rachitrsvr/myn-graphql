@@ -6,7 +6,7 @@ namespace Myn.GraphQL.Tests
     {
         private ServiceProvider _serviceProvider;
         //private string DataSource = "Data Source=C:\\Projects\\myn-graphql\\xUnit.myn-graphql-sample\\myn-sqlite.db";
-        private string DataSource = "Host=localhost;Database=postgres;Username=postgres;Password=start;Port=5432";
+        private string DataSource = "Host=172.21.0.2;Database=postgres;Username=postgres;Password=start;Port=5432";
         public MigrationTests()
         {
             // Set up FluentMigrator services

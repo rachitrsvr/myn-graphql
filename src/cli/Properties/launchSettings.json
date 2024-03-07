@@ -12,7 +12,21 @@
       "commandName": "Project",
       "commandLineArgs": "kafka-produce-messages",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "kafka-consume-messages": {
+      "commandName": "Project",
+      "commandLineArgs": "kafka-consume-messages",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "migrate-database": {
+      "commandName": "Project",
+      "commandLineArgs": "migrate-database",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
   }

@@ -4,7 +4,8 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "myn-graphql-sample": "StartDebugging"
+        "myn-graphql-sample": "StartDebugging",
+        "api": "StartDebugging"
       }
     }
   }

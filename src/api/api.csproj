@@ -6,9 +6,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Myn.GraphQL.Api</RootNamespace>
     <UserSecretsId>748d1cc4-6a5c-485e-a660-a977e9e0deca</UserSecretsId>
-    <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <AssemblyName>Myn.GraphQL.Api</AssemblyName>
+    <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>
